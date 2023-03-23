@@ -1,5 +1,6 @@
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js"
 import { auth } from './firebase.js'
+import { showmessage } from './showmessage.js'
 
 const signupForm = document.querySelector('#signupform');
 
@@ -18,19 +19,23 @@ signupForm.addEventListener('submit', async (e)=> {
         //cierra el modal de signup
         const signupModal = document.querySelector('#signupmodal')
         const modal = bootstrap.Modal.getInstance(signupModal)
-        modal.hite()
+        modal.hide()
+
+        showmessage('Welcome ' + userCredentials.user.email)
+
+
     } catch (error) {
         console.log(error.message);
         console.log(error.code);
 
         if (error.code === 'auth/email-already-in-use') {
-            alert('Email already in use')
+            showmessage('El Email indicado ya existe', 'error')
         }else if (error.code === 'auth/invalid-email') {
-            alert('invalid email')
+            showmessage('Invalid email', 'error')
         }else if (error.code === 'auth/weak-password') {
-            alert('password is too weak')
+            showmessage('El Password no ocumple con las caracteristicas necesarias', 'error')
         } else if (error.code) {
-            alert('Algo salio Mal')
+            showmessage(error.message, 'error')
         }
     }
 })
